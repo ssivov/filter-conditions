@@ -22,7 +22,7 @@ export let getKustoCondition = (filter: IFilterCondition): string => {
             value = <RangeValue>filter.value;
             const lessOrEqual = KustoOperatorStrings[FilterOperator.LessOrEqual];
             const greaterOrEqual = KustoOperatorStrings[FilterOperator.GreaterOrEqual];
-            condition += ` ${greaterOrEqual} ${value.min} and ${lessOrEqual} ${value.max}`;
+            condition += ` ${greaterOrEqual} ${value.min} and ${filter.value} ${lessOrEqual} ${value.max}`;
             break;
         default:
             condition += ` ${KustoOperatorStrings[operator]}`;

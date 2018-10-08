@@ -22,7 +22,7 @@ export let getSqlCondition = (filter: IFilterCondition): string => {
             value = <RangeValue>filter.value;
             const minBound = SqlOperatorStrings[value.minExclusive ? FilterOperator.Greater : FilterOperator.GreaterOrEqual];
             const maxBound = SqlOperatorStrings[value.maxExclusive ? FilterOperator.Less : FilterOperator.LessOrEqual];
-            condition += ` ${minBound} ${value.min} AND ${maxBound} ${value.max}`;
+            condition += ` ${minBound} ${value.min} AND ${filter.field} ${maxBound} ${value.max}`;
             break;
         case FilterOperator.Contains:
             condition += ` ${SqlOperatorStrings[operator]} '%${filter.value}%'`;
