@@ -1,0 +1,31 @@
+{
+  "name": "filter-conditions",
+  "version": "0.0.1",
+  "description": "Small library for representing filter conditions in a json object",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ssivov/filter-conditions.git"
+  },
+  "author": "Sviatoslav Sivov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ssivov/filter-conditions/issues"
+  },
+  "homepage": "https://github.com/ssivov/filter-conditions#readme",
+  "dependencies": {
+    "is-number": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/is-number": "^3.0.1",
+    "del-cli": "^1.1.0",
+    "tslint": "^5.11.0",
+    "tslint-microsoft-contrib": "^5.2.1",
+    "typescript": "^3.1.1"
+  },
+  "scripts": {
+    "build": "yarn clean && tsc",
+    "clean": "del-cli dist/"
+  }
+}

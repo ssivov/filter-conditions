@@ -1,0 +1,11 @@
+# Visual Studio Code temporary files
+.vscode/
+
+# Build results
+dist/
+
+# npm packages
+node_modules
+
+# various logs
+*.log
