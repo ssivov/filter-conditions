@@ -8,7 +8,15 @@ interface IFilterConditionEnums {
 }
 
 declare const isValidFilterCondition: (condition: IFilterCondition) => boolean;
+declare const getSqlCondition: (condition: IFilterCondition) => string;
+declare const getKustoCondition: (condition: IFilterCondition) => string;
 
 export * from "./filter";
 
-export { FilterDataType, FilterOperator, isValidFilterCondition };
+export {
+    FilterDataType,
+    FilterOperator,
+    isValidFilterCondition,
+    getSqlCondition,
+    getKustoCondition
+};
