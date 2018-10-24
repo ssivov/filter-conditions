@@ -1,9 +1,19 @@
-import { IFilterCondition, RangeValue, SingleValue } from "../types/filter";
+import { IFilterCondition, IFilterConnective, RangeValue, SingleValue } from "../types/filter";
+import { ConnectiveOperator } from "./connective";
 import { FilterDataType } from "./datatype";
 import { FilterOperator } from "./operator";
 
 // tslint:disable-next-line:no-require-imports
 import isNumber = require("is-number");
+
+export const isValidConnective = (connective: IFilterConnective): boolean => {
+    return (
+        !!connective
+        && connective.operator in ConnectiveOperator
+        && connective.filters
+        && connective.filters.length > 0
+    );
+};
 
 // High-level filter condition sanitizing
 // This could be useful when building a filter condition from users' input in the UI
