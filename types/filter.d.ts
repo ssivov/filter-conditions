@@ -1,3 +1,4 @@
+import { ConnectiveOperator } from "../src/connective";
 import { FilterDataType } from "../src/datatype";
 import { FilterOperator } from "../src/operator";
 
@@ -20,3 +21,10 @@ export interface IFilterCondition {
     value?: FilterValue;
     invert?: boolean;
 }
+
+export interface IFilterConnective {
+    filters: Filter[];
+    operator: ConnectiveOperator;
+}
+
+export type Filter = IFilterCondition | IFilterConnective;
