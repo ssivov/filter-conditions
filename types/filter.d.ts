@@ -25,6 +25,7 @@ export interface IFilterCondition {
 export interface IFilterConnective {
     filters: Filter[];
     operator: ConnectiveOperator;
+    invert?: boolean;
 }
 
 export type Filter = IFilterCondition | IFilterConnective;

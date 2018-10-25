@@ -30,7 +30,8 @@ export const getSqlCondition = (filter: Filter): string => {
             const parts = connectiveFilter.filters.map((subFilter: Filter): string => (
                 `(${getSqlCondition(subFilter)})`
             ));
-            return parts.join(` ${SqlConnectiveStrings[connectiveFilter.operator]} `);
+            const joinedParts = parts.join(` ${SqlConnectiveStrings[connectiveFilter.operator]} `);
+            return connectiveFilter.invert ? `NOT(${joinedParts})` : joinedParts;
         default:
             return "";
     }
