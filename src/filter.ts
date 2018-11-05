@@ -1,4 +1,4 @@
-import { Filter } from "../types";
+import { ConnectiveOperator, Filter } from "../types";
 
 export enum FilterType {
     SingleCondition,
@@ -16,6 +16,22 @@ export const getFilterType = (filter: Filter): FilterType => {
         }
     }
     return filterType;
+};
+
+export const connectFilters = (operator: ConnectiveOperator, filters: Filter[]): Filter => {
+    let connectedFilter: Filter = null;
+    const definedFilters = filters ? filters.filter((filter: Filter) => !!filter) : [];
+    if (definedFilters.length > 0) {
+        connectedFilter = (
+            definedFilters.length === 1
+            ? definedFilters[0]
+            : {
+                operator,
+                filters: definedFilters
+            }
+        );
+    }
+    return connectedFilter;
 };
 
 const hasKeys = (obj: any, keys: string[]): boolean => {
