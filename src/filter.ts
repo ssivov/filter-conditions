@@ -8,10 +8,12 @@ export enum FilterType {
 
 export const getFilterType = (filter: Filter): FilterType => {
     let filterType: FilterType = FilterType.NotFilter;
-    if (hasKeys(filter, ["filters", "operator"])) {
-        filterType = FilterType.Connective;
-    } else if (hasKeys(filter, ["field", "dataType", "operator"])) {
-        filterType = FilterType.SingleCondition;
+    if (filter) {
+        if (hasKeys(filter, ["filters", "operator"])) {
+            filterType = FilterType.Connective;
+        } else if (hasKeys(filter, ["field", "dataType", "operator"])) {
+            filterType = FilterType.SingleCondition;
+        }
     }
     return filterType;
 };
