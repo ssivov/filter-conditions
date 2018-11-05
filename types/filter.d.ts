@@ -1,6 +1,9 @@
 import { ConnectiveOperator } from "../src/connective";
 import { FilterDataType } from "../src/datatype";
+import { FilterType } from "../src/filter";
 import { FilterOperator } from "../src/operator";
+
+export { FilterType } from "../src/filter";
 
 export declare type SingleValue = string | number | boolean | Date;
 export declare type RangeDataType = number | Date;
@@ -29,3 +32,6 @@ export interface IFilterConnective {
 }
 
 export type Filter = IFilterCondition | IFilterConnective;
+
+export const getFilterType: (filter: Filter) => FilterType;
+export const connectFilters: (operator: ConnectiveOperator, filters: Filter[]) => Filter;
