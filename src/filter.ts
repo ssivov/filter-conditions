@@ -1,4 +1,5 @@
-import { ConnectiveOperator, Filter } from "../types";
+import { Filter } from "../types/filter";
+import { ConnectiveOperator } from "./connective";
 
 export enum FilterType {
     SingleCondition,

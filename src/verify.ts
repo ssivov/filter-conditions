@@ -3,8 +3,7 @@ import { ConnectiveOperator } from "./connective";
 import { FilterDataType } from "./datatype";
 import { FilterOperator } from "./operator";
 
-// tslint:disable-next-line:no-require-imports
-import isNumber = require("is-number");
+import isNumber from "is-number";
 
 export const isValidConnective = (connective: IFilterConnective): boolean => {
     return (
