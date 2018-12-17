@@ -1,5 +1,8 @@
+import fecha from "fecha";
+
 import { Filter, FilterValue, IFilterCondition, IFilterConnective, RangeValue } from "../../types/filter";
 import { ConnectiveOperator } from "../connective";
+import { FilterDataType } from "../datatype";
 import { FilterType, getFilterType } from "../filter";
 import { FilterOperator } from "../operator";
 
@@ -44,10 +47,16 @@ const getSingleFilterSqlCondition = (filter: IFilterCondition): string => {
     switch (filter.operator) {
         case FilterOperator.Range:
             value = <RangeValue>filter.value;
-            const minBound = SqlOperatorStrings[value.minExclusive ? FilterOperator.Greater : FilterOperator.GreaterOrEqual];
-            const maxBound = SqlOperatorStrings[value.maxExclusive ? FilterOperator.Less : FilterOperator.LessOrEqual];
+            const minBoundOperator = SqlOperatorStrings[value.minExclusive ? FilterOperator.Greater : FilterOperator.GreaterOrEqual];
+            const maxBoundOperator = SqlOperatorStrings[value.maxExclusive ? FilterOperator.Less : FilterOperator.LessOrEqual];
             const andConnective = SqlConnectiveStrings[ConnectiveOperator.And];
-            condition += ` ${minBound} ${value.min} ${andConnective} ${filter.field} ${maxBound} ${value.max}`;
+            let minValue = `${value.min}`;
+            let maxValue = `${value.max}`;
+            if (filter.dataType === FilterDataType.Date) {
+                minValue = dateToSqlDateTime(<string | Date>value.min);
+                maxValue = dateToSqlDateTime(<string | Date>value.max);
+            }
+            condition += ` ${minBoundOperator} '${minValue}' ${andConnective} ${filter.field} ${maxBoundOperator} '${maxValue}'`;
             break;
         case FilterOperator.Contains:
             condition += ` ${SqlOperatorStrings[operator]} '%${filter.value}%'`;
@@ -62,4 +71,11 @@ const getSingleFilterSqlCondition = (filter: IFilterCondition): string => {
         condition = `NOT(${condition})`;
     }
     return condition;
+};
+
+// Even if filter dataType is set to 'Date', it might still be string if object was stringified and then parsed back.
+// Date object is stringified into a UTC date string and then is parsed back as a string, instead of getting reconstructed as Date.
+const dateToSqlDateTime = (date: Date | string): string => {
+    const dateTypeObject: Date = typeof date === "string" ? new Date(date) : date;
+    return fecha.format(dateTypeObject, "YYYY-MM-DD HH:mm:ss.SSS");
 };

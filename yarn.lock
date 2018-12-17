@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@types/fecha@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@types/fecha/-/fecha-2.3.1.tgz#2ee937c0a2b760e165835d62385bb382226fc901"
+  integrity sha512-2PKrYmgQlrgJtQekwXQMkp1nMqDYnEVFxdFTiU5LzpWS87XYufw29TSOqaQ5GXP9R+4U5e0CdiSL8+DCDkyZNQ==
+  dependencies:
+    fecha "*"
+
 "@types/is-number@^3.0.1":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@types/is-number/-/is-number-3.0.1.tgz#94d2c21efb00a8650e7f1af1da735a829a861295"
@@ -253,6 +260,11 @@ execa@^0.7.0:
     p-finally "^1.0.0"
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
+
+fecha@*, fecha@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/fecha/-/fecha-3.0.2.tgz#fb3adb02762ab6dd27f7d5419f2f6c21a4229cd7"
+  integrity sha512-oJK6YbKtmz1uvuDsUHOmo9X2HKmYAcRWtzW2yrCzOJRUfyGUEu/8cDymBdedgEnkdJiTpNyPogWqfTuYffU4yA==
 
 find-up@^1.0.0:
   version "1.1.2"
