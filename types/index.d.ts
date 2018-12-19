@@ -11,6 +11,7 @@ interface IFilterConditionEnums {
 declare const isValidConnective: (connective: IFilterConnective) => boolean;
 declare const isValidFilterCondition: (condition: IFilterCondition) => boolean;
 declare const getSqlCondition: (filter: Filter) => string;
+declare const getCosmosDbCondition: (filter: Filter, tableAlias: string) => string;
 
 export * from "./filter";
 
@@ -18,6 +19,7 @@ export {
     ConnectiveOperator,
     FilterDataType,
     FilterOperator,
+    getCosmosDbCondition,
     getSqlCondition,
     isValidFilterCondition
 };
