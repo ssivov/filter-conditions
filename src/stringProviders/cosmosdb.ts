@@ -8,7 +8,7 @@ import { FilterOperator } from "../operator";
 
 export const CosmosDbOperatorStrings: {[key: string]: string} = {
     [FilterOperator.Equals]: '=',
-    [FilterOperator.Contains]: 'LIKE',
+    [FilterOperator.Contains]: 'CONTAINS',
     [FilterOperator.Greater]: '>',
     [FilterOperator.Less]: '<',
     [FilterOperator.GreaterOrEqual]: '>=',
@@ -42,9 +42,10 @@ export const getCosmosDbCondition = (filter: Filter, tableAlias: string): string
 
 const getSingleFilterCosmosDbCondition = (filter: IFilterCondition, tableAlias: string): string => {
     const operator = filter.operator;
-    let condition = `${tableAlias}.${filter.field}`;
+    const field = `${tableAlias}.${filter.field}`;
+    let condition = field;
     let value: FilterValue = null;
-    switch (filter.operator) {
+    switch (operator) {
         case FilterOperator.Range:
             value = <RangeValue>filter.value;
             const minBoundOperator = CosmosDbOperatorStrings[value.minExclusive ? FilterOperator.Greater : FilterOperator.GreaterOrEqual];
@@ -56,10 +57,10 @@ const getSingleFilterCosmosDbCondition = (filter: IFilterCondition, tableAlias: 
                 minValue = dateToCosmosDbDateTime(<string | Date>value.min);
                 maxValue = dateToCosmosDbDateTime(<string | Date>value.max);
             }
-            condition += ` ${minBoundOperator} '${minValue}' ${andConnective} ${tableAlias}.${filter.field} ${maxBoundOperator} '${maxValue}'`;
+            condition += ` ${minBoundOperator} '${minValue}' ${andConnective} ${field} ${maxBoundOperator} '${maxValue}'`;
             break;
         case FilterOperator.Contains:
-            condition += ` ${CosmosDbOperatorStrings[operator]} '%${filter.value}%'`;
+            condition = `${CosmosDbOperatorStrings[operator]}(${field}, '${filter.value}')`;
             break;
         default:
             condition += ` ${CosmosDbOperatorStrings[operator]}`;
@@ -68,7 +69,7 @@ const getSingleFilterCosmosDbCondition = (filter: IFilterCondition, tableAlias: 
                     condition += ` ${filter.value}`;
                 } else {
                     condition += ` '${filter.value}'`;
-                }                
+                }
             }
     }
     if (filter.invert) {
