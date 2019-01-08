@@ -1,5 +1,3 @@
-import fecha from "fecha";
-
 import { Filter, FilterValue, IFilterCondition, IFilterConnective, RangeValue } from "../../types/filter";
 import { ConnectiveOperator } from "../connective";
 import { FilterDataType } from "../datatype";
@@ -51,13 +49,9 @@ const getSingleFilterCosmosDbCondition = (filter: IFilterCondition, tableAlias: 
             const minBoundOperator = CosmosDbOperatorStrings[value.minExclusive ? FilterOperator.Greater : FilterOperator.GreaterOrEqual];
             const maxBoundOperator = CosmosDbOperatorStrings[value.maxExclusive ? FilterOperator.Less : FilterOperator.LessOrEqual];
             const andConnective = CosmosDbConnectiveStrings[ConnectiveOperator.And];
-            let minValue = `${value.min}`;
-            let maxValue = `${value.max}`;
-            if (filter.dataType === FilterDataType.Date) {
-                minValue = dateToCosmosDbDateTime(<string | Date>value.min);
-                maxValue = dateToCosmosDbDateTime(<string | Date>value.max);
-            }
-            condition += ` ${minBoundOperator} '${minValue}' ${andConnective} ${field} ${maxBoundOperator} '${maxValue}'`;
+            const minValueStr = getValueString(value.min, filter.dataType);
+            const maxValueStr = getValueString(value.max, filter.dataType);
+            condition += ` ${minBoundOperator} ${minValueStr} ${andConnective} ${field} ${maxBoundOperator} ${maxValueStr}`;
             break;
         case FilterOperator.Contains:
             condition = `${CosmosDbOperatorStrings[operator]}(${field}, '${filter.value}')`;
@@ -65,11 +59,7 @@ const getSingleFilterCosmosDbCondition = (filter: IFilterCondition, tableAlias: 
         default:
             condition += ` ${CosmosDbOperatorStrings[operator]}`;
             if (filter.value !== null) {
-                if (filter.dataType === FilterDataType.Number) {
-                    condition += ` ${filter.value}`;
-                } else {
-                    condition += ` '${filter.value}'`;
-                }
+                condition += ` ${getValueString(filter.value, filter.dataType)}`;
             }
     }
     if (filter.invert) {
@@ -78,9 +68,12 @@ const getSingleFilterCosmosDbCondition = (filter: IFilterCondition, tableAlias: 
     return condition;
 };
 
-// Even if filter dataType is set to 'Date', it might still be string if object was stringified and then parsed back.
-// Date object is stringified into a UTC date string and then is parsed back as a string, instead of getting reconstructed as Date.
-const dateToCosmosDbDateTime = (date: Date | string): string => {
-    const dateTypeObject: Date = typeof date === "string" ? new Date(date) : date;
-    return fecha.format(dateTypeObject, "YYYY-MM-DD HH:mm:ss.SSS");
+// CosmosDB is requires single quotes for string values, but number values should not be quoted
+const getValueString = (value: FilterValue, dataType: FilterDataType): string => {
+    switch (dataType) {
+        case FilterDataType.Number:
+            return `${value}`;
+        default:
+            return `'${value}'`;
+    }
 };
