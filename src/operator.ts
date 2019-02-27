@@ -10,7 +10,8 @@ export enum FilterOperator {
     Range = "Range",
     IsTrue = "IsTrue",
     IsFalse = "IsFalse",
-    IsEmptyString = "IsEmptyString"
+    IsEmptyString = "IsEmptyString",
+    FunctionCall = "FunctionCall"
 }
 
 export const DataTypeOperators = {

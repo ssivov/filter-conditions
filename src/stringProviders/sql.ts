@@ -45,6 +45,9 @@ const getSingleFilterSqlCondition = (filter: IFilterCondition): string => {
     let condition = `${filter.field}`;
     let value: FilterValue = null;
     switch (filter.operator) {
+        case FilterOperator.FunctionCall:
+            // unsupported for SQL, returning true for this condition
+            throw new SyntaxError("Function Calls are not supported for SQL");
         case FilterOperator.Range:
             value = <RangeValue>filter.value;
             const minBoundOperator = SqlOperatorStrings[value.minExclusive ? FilterOperator.Greater : FilterOperator.GreaterOrEqual];

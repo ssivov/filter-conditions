@@ -1,4 +1,4 @@
-import { Filter, FilterValue, IFilterCondition, IFilterConnective, RangeValue } from "../../types/filter";
+import { Filter, FilterValue, IFilterCondition, IFilterConnective, RangeValue, ParamListValue, Param } from "../../types/filter";
 import { ConnectiveOperator } from "../connective";
 import { FilterDataType } from "../datatype";
 import { FilterType, getFilterType } from "../filter";
@@ -56,6 +56,9 @@ const getSingleFilterCosmosDbCondition = (filter: IFilterCondition, tableAlias: 
         case FilterOperator.Contains:
             condition = `${CosmosDbOperatorStrings[operator]}(${field}, '${filter.value}')`;
             break;
+        case FilterOperator.FunctionCall:
+            condition = `udf.${filter.field}(${getStringFromParamList(<ParamListValue>filter.value, tableAlias)})`;
+            break;
         default:
             condition += ` ${CosmosDbOperatorStrings[operator]}`;
             if (filter.value !== null) {
@@ -77,3 +80,8 @@ const getValueString = (value: FilterValue, dataType: FilterDataType): string =>
             return `'${value}'`;
     }
 };
+
+const getStringFromParamList = (paramList: ParamListValue, tableAlias: string): string => {
+    const prepended = paramList.map((param: Param) => param.prependTable ? `${tableAlias}.${param.value}` : param.value);
+    return prepended.join(',');
+}
