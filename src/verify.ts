@@ -26,15 +26,16 @@ export const isValidFilterCondition = (condition: IFilterCondition): boolean => 
 };
 
 const isValueValid = (condition: IFilterCondition): boolean => {
-    return (
-        isValueRequired(condition.operator)
-        ? (
-            condition.operator === FilterOperator.Range
-            ? isValidRangeValue(condition.dataType, <RangeValue>condition.value)
-            : isValidSingleValue(condition.dataType, <SingleValue>condition.value)
-        )
-        : true
-    );
+    if (isValueRequired(condition.operator)) {
+        if (condition.operator === FilterOperator.FunctionCall) {
+            return condition.dataType === FilterDataType.Other && Array.isArray(condition.value);
+        } else if (condition.operator === FilterOperator.Range) {
+            return isValidRangeValue(condition.dataType, <RangeValue>condition.value);
+        } else {
+            return isValidSingleValue(condition.dataType, <SingleValue>condition.value);
+        }
+    }
+    return true;
 };
 
 const isValidSingleValue = (dataType: FilterDataType, value: SingleValue): boolean => {
