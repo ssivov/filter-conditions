@@ -7,13 +7,8 @@ export { FilterType } from "../src/filter";
 
 export declare type SingleValue = string | number | boolean | Date;
 export declare type RangeDataType = number | Date;
-export declare type Param = {
-    value: SingleValue;
-    prependTable: boolean;
-}
-export declare type ParamListValue = Param[];
 export declare type RangeValue = Range<RangeDataType>;
-export declare type FilterValue = SingleValue | RangeValue | ParamListValue;
+export declare type FilterValue = SingleValue | RangeValue | SingleValue[];
 
 export type Range<T> = {
     min: T;
