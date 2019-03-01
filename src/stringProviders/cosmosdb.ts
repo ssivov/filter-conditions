@@ -1,4 +1,4 @@
-import { Filter, FilterValue, IFilterCondition, IFilterConnective, RangeValue } from "../../types/filter";
+import { Filter, FilterValue, IFilterCondition, IFilterConnective, RangeValue, SingleValue } from "../../types/filter";
 import { ConnectiveOperator } from "../connective";
 import { FilterDataType } from "../datatype";
 import { FilterType, getFilterType } from "../filter";
@@ -55,6 +55,9 @@ const getSingleFilterCosmosDbCondition = (filter: IFilterCondition, tableAlias: 
             break;
         case FilterOperator.Contains:
             condition = `${CosmosDbOperatorStrings[operator]}(${field}, '${filter.value}')`;
+            break;
+        case FilterOperator.FunctionCall:
+            condition = `udf.${filter.field}(${(<SingleValue[]>filter.value).join(',')})`;
             break;
         default:
             condition += ` ${CosmosDbOperatorStrings[operator]}`;
