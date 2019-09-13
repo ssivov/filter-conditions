@@ -13,7 +13,8 @@ export const CosmosDbOperatorStrings: {[key: string]: string} = {
     [FilterOperator.LessOrEqual]: '<=',
     [FilterOperator.IsTrue]: '= TRUE',
     [FilterOperator.IsFalse]: '= FALSE',
-    [FilterOperator.IsEmptyString]: ' = ""'
+    [FilterOperator.IsEmptyString]: ' = ""',
+    [FilterOperator.ArrayContains]: 'Array_Contains'
 };
 
 export const CosmosDbConnectiveStrings: {[key: string]: string} = {
@@ -54,6 +55,7 @@ const getSingleFilterCosmosDbCondition = (filter: IFilterCondition, tableAlias: 
             condition += ` ${minBoundOperator} ${minValueStr} ${andConnective} ${field} ${maxBoundOperator} ${maxValueStr}`;
             break;
         case FilterOperator.Contains:
+        case FilterOperator.ArrayContains:
             condition = `${CosmosDbOperatorStrings[operator]}(${field}, '${filter.value}')`;
             break;
         case FilterOperator.FunctionCall:
