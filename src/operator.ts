@@ -11,7 +11,8 @@ export enum FilterOperator {
     IsTrue = "IsTrue",
     IsFalse = "IsFalse",
     IsEmptyString = "IsEmptyString",
-    FunctionCall = "FunctionCall"
+    FunctionCall = "FunctionCall",
+    ArrayContains = "ArrayContains"
 }
 
 export const DataTypeOperators = {
