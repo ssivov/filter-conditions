@@ -12,6 +12,7 @@ declare const isValidConnective: (connective: IFilterConnective) => boolean;
 declare const isValidFilterCondition: (condition: IFilterCondition) => boolean;
 declare const getSqlCondition: (filter: Filter) => string;
 declare const getCosmosDbCondition: (filter: Filter, tableAlias: string) => string;
+declare const getAzureSearchCondition: (filter: Filter) => string;
 
 export * from "./filter";
 
@@ -19,6 +20,7 @@ export {
     ConnectiveOperator,
     FilterDataType,
     FilterOperator,
+    getAzureSearchCondition,
     getCosmosDbCondition,
     getSqlCondition,
     isValidFilterCondition
