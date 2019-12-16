@@ -6,7 +6,7 @@ import { FilterOperator } from "../operator";
 
 export const AzureSearchOperatorStrings: {[key: string]: string} = {
     [FilterOperator.Equals]: 'eq',
-    [FilterOperator.Contains]: 'N/A',
+    [FilterOperator.Contains]: 'search.ismatch(',
     [FilterOperator.Greater]: 'gt',
     [FilterOperator.Less]: 'lt',
     [FilterOperator.GreaterOrEqual]: 'ge',
@@ -42,7 +42,7 @@ export const getAzureSearchCondition = (filter: Filter): string => {
 const getSingleFilterAzureSearchCondition = (filter: IFilterCondition): string => {
     const operator = filter.operator;
     const field = `${filter.field}`;
-    let condition = field;
+    let condition = '';
     let value: FilterValue = null;
     switch (operator) {
         case FilterOperator.Range:
@@ -53,16 +53,17 @@ const getSingleFilterAzureSearchCondition = (filter: IFilterCondition): string =
             const andConnective = AzureSearchConnectiveStrings[ConnectiveOperator.And];
             const minValueStr = getValueString(value.min, filter.dataType);
             const maxValueStr = getValueString(value.max, filter.dataType);
-            condition += ` ${minBoundOperator} ${minValueStr} ${andConnective} ${field} ${maxBoundOperator} ${maxValueStr}`;
+            condition = `${field} ${minBoundOperator} ${minValueStr} ${andConnective} ${field} ${maxBoundOperator} ${maxValueStr}`;
             break;
         case FilterOperator.Contains:
-        case FilterOperator.ArrayContains:
-            throw new SyntaxError("Contains are not supported for Azure Search");
+            condition = `${AzureSearchOperatorStrings[operator]}'${filter.value}','${filter.field}')`;
             break;
+        case FilterOperator.ArrayContains:
+            throw new SyntaxError("ArrayContains is not supported for Azure Search");
         case FilterOperator.FunctionCall:
             throw new SyntaxError("Function Calls are not supported for Azure Search");
         default:
-            condition += ` ${AzureSearchOperatorStrings[operator]}`;
+            condition = `${field} ${AzureSearchOperatorStrings[operator]}`;
             if (filter.value !== null) {
                 condition += ` ${getValueString(filter.value, filter.dataType)}`;
             }
