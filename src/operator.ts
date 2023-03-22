@@ -12,14 +12,20 @@ export enum FilterOperator {
     IsFalse = "IsFalse",
     IsEmptyString = "IsEmptyString",
     FunctionCall = "FunctionCall",
-    ArrayContains = "ArrayContains"
+    ArrayContains = "ArrayContains",
+    StartsWith = "StarstWith",
+    EndsWith = "EndsWith",
+    RegexMatch = "RegexMatch"
 }
 
 export const DataTypeOperators = {
     [FilterDataType.String]: [
         FilterOperator.Equals,
         FilterOperator.Contains,
-        FilterOperator.IsEmptyString
+        FilterOperator.IsEmptyString,
+        FilterOperator.StartsWith,
+        FilterOperator.EndsWith,
+        FilterOperator.RegexMatch
     ],
     [FilterDataType.Number]: [
         FilterOperator.Equals,
