@@ -1,6 +1,6 @@
 {
   "name": "filter-conditions",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Small library for representing filter conditions in a json object",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
@@ -28,6 +28,7 @@
   },
   "scripts": {
     "build": "yarn clean && tsc",
-    "clean": "del-cli dist/"
+    "clean": "del-cli dist/",
+    "prepublishOnly": "yarn build"
   }
 }
